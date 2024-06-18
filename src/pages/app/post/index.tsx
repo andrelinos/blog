@@ -1,21 +1,28 @@
 import { useEffect, useState } from 'react'
+import Markdown from 'react-markdown'
+import { useParams } from 'react-router-dom'
+import remarkGfm from 'remark-gfm'
 
 import { IssueProps, UserProps } from '@/_types/github'
 import { fetchGithubUserData } from '@/utils/fetchGithubUserData'
 
-import { InputSearch } from './components/input-search'
-import { Posts } from './components/posts'
-import { Profile } from './components/profile'
-import { HomeContainer } from './styles'
+import { HeaderPost } from './components/header'
+import { PostContainer, PostContent } from './styles'
 
 interface GitDataProps {
   userData: UserProps
   issuesData: IssueProps[]
 }
 
-export function Home() {
+export function Post() {
+  const { number } = useParams()
+
   const [gitData, setGitData] = useState<GitDataProps | null>()
   const [loading, setLoading] = useState(true)
+
+  const issue = gitData?.issuesData.find(
+    (is) => String(is.number)?.trim() === String(number)?.trim(),
+  )
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,13 +40,14 @@ export function Home() {
     fetchData()
   }, [])
 
-  console.log('USER DATA ::', JSON.stringify(gitData?.issuesData, null, 2))
+  if (loading) return <p>Loading...</p>
 
   return (
-    <HomeContainer>
-      <Profile data={gitData?.userData} isLoading={loading} />
-      <InputSearch />
-      <Posts data={gitData?.issuesData} isLoading={loading} />
-    </HomeContainer>
+    <PostContainer>
+      <HeaderPost data={issue} />
+      <PostContent>
+        <Markdown remarkPlugins={[remarkGfm]}>{issue?.body}</Markdown>
+      </PostContent>
+    </PostContainer>
   )
 }

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const PostsContainer = styled.section`
@@ -11,6 +12,7 @@ export const PostsContainer = styled.section`
   gap: 2rem;
 
   p {
+    text-decoration: none;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
@@ -22,7 +24,7 @@ export const PostsContainer = styled.section`
   }
 `
 
-export const PostCard = styled.div`
+export const PostCard = styled(Link)`
   width: 26rem;
   height: 16.25rem;
   border-radius: 10px;
@@ -31,6 +33,7 @@ export const PostCard = styled.div`
   background: ${(props) => props.theme['base-post']};
   color: ${(props) => props.theme['base-title']};
   transition: all 0.2s ease-in-out;
+  text-decoration: none;
 
   &:hover {
     border-color: ${(props) => props.theme['base-label']};
@@ -41,6 +44,7 @@ export const PostCard = styled.div`
 export const PostCardHeader = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-between;
   margin-bottom: 1.25rem;
 
   > h2 {

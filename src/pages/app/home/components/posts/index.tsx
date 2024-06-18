@@ -1,23 +1,26 @@
+import { IssueProps } from '@/_types/github'
+import { formatDate } from '@/utils/formatDate'
+
 import { PostCard, PostCardHeader, PostsContainer } from './styles'
 
-export function Posts() {
+interface PostsProps {
+  data?: IssueProps[] | null
+  isLoading?: boolean
+}
+
+export function Posts({ data, isLoading }: PostsProps) {
+  if (isLoading) return <p>Loading...</p>
+
   return (
     <PostsContainer>
-      {Array.from({ length: 10 }).map((_, i) => {
+      {data?.map((issue, i) => {
         return (
-          <PostCard key={i}>
+          <PostCard key={i} to={`/post/${issue.number}`}>
             <PostCardHeader>
-              <h2>JavaScript dad types and data structures</h2>
-              <span>Há 1 dia</span>
+              <h2>{issue.title}</h2>
+              <span>há {formatDate(issue?.created_at)}</span>
             </PostCardHeader>
-            <p>
-              Programming languages all have built-in data structures, but these
-              often differ from one language to another. This article attempts
-              to list the built-in data structures available in JavaScript and
-              what properties they have. These can be used to build other data
-              structures. Wherever possible, comparisons with other languages
-              are drawn.
-            </p>
+            <p>{issue.body}</p>
           </PostCard>
         )
       })}

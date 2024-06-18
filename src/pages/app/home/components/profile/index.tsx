@@ -1,6 +1,8 @@
 import { FaBuilding, FaGithub, FaUserGroup } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 
+import { UserProps } from '@/_types/github'
+
 import {
   ProfileAvatar,
   ProfileContainer,
@@ -9,32 +11,42 @@ import {
   ProfileSocial,
 } from './styles'
 
-export function Profile() {
+interface ProfileProps {
+  data?: UserProps | null
+  isLoading?: boolean
+}
+
+export function Profile({ data, isLoading }: ProfileProps) {
+  if (isLoading) return <p>Loading...</p>
+
   return (
     <ProfileContainer>
       <ProfileContent>
         <ProfileAvatar>
-          <img src="https://github.com/andrelinos.png" alt="" />
+          <img src={data?.avatar_url} alt={data?.name || ''} />
         </ProfileAvatar>
         <div>
           <ProfileHeader>
             <h2>Andrelino Silva</h2>
-            <Link to="https://github.com/andrelinos">GITHUB</Link>
+            <Link to={data?.html_url || ''} target="_blank">
+              GITHUB
+            </Link>
           </ProfileHeader>
-          <p>
-            Tristique volutpat pulvinar vel massa, pellentesque egestas. Eu
-            viverra massa quam dignissim aenean malesuada suscipit. Nunc,
-            volutpat pulvinar vel mass.
-          </p>
+          <p>{data?.bio}</p>
           <ProfileSocial>
-            <Link to="#">
-              <FaGithub /> andrelinos
+            <Link to={data?.html_url || ''} target="_blank">
+              <FaGithub /> {data?.login}
             </Link>
-            <Link to="#">
-              <FaBuilding /> Rocketseat
+            {data?.company && (
+              <span>
+                <FaBuilding /> {data?.company}
+              </span>
+            )}
+            <Link to={`${data?.html_url}/?tab=followers` || ''} target="_blank">
+              <FaUserGroup /> {String(data?.followers) || '0'} seguidores
             </Link>
-            <Link to="#">
-              <FaUserGroup /> 32 seguidores
+            <Link to={`${data?.html_url}/?tab=following` || ''} target="_blank">
+              <FaUserGroup /> {String(data?.following) || '0'} seguindo
             </Link>
           </ProfileSocial>
         </div>
