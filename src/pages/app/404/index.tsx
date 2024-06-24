@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom'
 
+import { Container } from './styles'
+
 export function NotFound() {
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center gap-8">
+    <Container>
       <h1 className="max-w-4xl px-2 text-4xl font-bold">
         404 - Página não encontrada.
       </h1>
 
       <div className="flex h-96 w-96 items-center justify-center overflow-hidden rounded-full border border-violet-500 p-4 dark:via-violet-400">
         <img
-          src="/assets/error-404.jpg"
+          src="/assets/404.png"
           alt="Página não encontrada"
           className="h-92 w-92 rounded-full  object-cover"
         />
@@ -21,6 +23,6 @@ export function NotFound() {
           Página inicial
         </Link>
       </p>
-    </div>
+    </Container>
   )
 }

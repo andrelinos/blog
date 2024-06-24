@@ -1,30 +1,70 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { IssueProps, UserProps } from '@/_types/github'
-import { fetchGithubUserData } from '@/utils/fetchGithubUserData'
+import { env } from '@/env'
+import {
+  fetchGithubIssuesData,
+  fetchGithubUserData,
+} from '@/utils/fetchGithubUserData'
 
 import { InputSearch } from './components/input-search'
 import { Posts } from './components/posts'
 import { Profile } from './components/profile'
 import { HomeContainer } from './styles'
 
-interface GitDataProps {
-  userData: UserProps
-  issuesData: IssueProps[]
-}
-
 export function Home() {
-  const [gitData, setGitData] = useState<GitDataProps | null>()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [userData, setUserData] = useState<UserProps | null>()
+  const [issuesData, setIssuesData] = useState<IssueProps[] | null>()
   const [loading, setLoading] = useState(true)
+  const [textSearch, setTextSearch] = useState('')
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = async (
+    event,
+  ) => {
+    if (event.key === 'Enter') {
+      try {
+        setLoading(true)
+
+        const data = await fetchGithubIssuesData({
+          username: env.VITE_GITHUB_USER,
+          query: textSearch,
+          repo: env.VITE_REPO_NAME,
+        })
+
+        console.log(data?.issuesData.items)
+        setIssuesData(data?.issuesData.items)
+      } catch (error) {
+        console.error('Erro ao executar a busca:', error)
+        // Tratar o erro conforme necessário
+      } finally {
+        setLoading(false)
+      }
+    }
+  }
+
+  // const fetchIssues = useCallback(async (query: string = '') => {
+  //   try {
+  //     setLoading(true)
+  //     const response = await api.get(
+  //       `/search/issues?q=${query}%20repo:${env.VITE_GITHUB_USER}/${env.VITE_REPO_NAME}`,
+  //     )
+  //     setGitData(response.data.items)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }, [])
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const data = await fetchGithubUserData('andrelinos')
-        setGitData(data)
+        const data = await fetchGithubUserData({ username: 'andrelinos' })
+        setUserData(data?.userData)
+        setIssuesData(data?.issuesData)
       } catch (error) {
-        setGitData(null)
+        setIssuesData(null)
+        setUserData(null)
       } finally {
         setLoading(false)
       }
@@ -33,13 +73,17 @@ export function Home() {
     fetchData()
   }, [])
 
-  console.log('USER DATA ::', JSON.stringify(gitData?.issuesData, null, 2))
-
   return (
     <HomeContainer>
-      <Profile data={gitData?.userData} isLoading={loading} />
-      <InputSearch />
-      <Posts data={gitData?.issuesData} isLoading={loading} />
+      <Profile data={userData} isLoading={loading} />
+      <InputSearch
+        publicationsCount={issuesData?.length}
+        ref={inputRef}
+        value={textSearch}
+        onChange={(e) => setTextSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <Posts data={issuesData} isLoading={loading} />
     </HomeContainer>
   )
 }

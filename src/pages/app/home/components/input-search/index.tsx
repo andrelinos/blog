@@ -1,13 +1,29 @@
+import { forwardRef, InputHTMLAttributes } from 'react'
+
 import { InputContainer } from './styles'
 
-export function InputSearch() {
-  return (
-    <InputContainer>
-      <div>
-        <span>Publicações</span>
-        <span>6 publicações</span>
-      </div>
-      <input type="text" placeholder="Buscar conteúdo" />
-    </InputContainer>
-  )
+interface InputSearchProps extends InputHTMLAttributes<HTMLInputElement> {
+  publicationsCount?: number
 }
+
+const InputSearch = forwardRef<HTMLInputElement, InputSearchProps>(
+  ({ publicationsCount, ...props }, ref) => {
+    return (
+      <InputContainer>
+        <div>
+          <strong>Publicações</strong>
+          {publicationsCount && <span>{publicationsCount} publicações</span>}
+        </div>
+        <input
+          type="search"
+          placeholder="Digite algo para pesquisar e pressione ENTER"
+          ref={ref}
+          {...props}
+        />
+      </InputContainer>
+    )
+  },
+)
+InputSearch.displayName = 'InputSearch'
+
+export { InputSearch }

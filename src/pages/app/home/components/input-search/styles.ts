@@ -10,7 +10,7 @@ export const InputContainer = styled.div`
     justify-content: space-between;
     margin-bottom: 0.625rem;
 
-    > span:first-of-type {
+    > strong {
       font-size: 1.125rem;
       font-weight: bold;
       color: ${(props) => props.theme.white};

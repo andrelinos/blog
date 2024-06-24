@@ -1,9 +1,15 @@
 import { api } from '@/lib/axios'
 
+interface FetchGithubUserDataProps {
+  username: string
+  query?: string
+  repo?: string
+}
+
 const CACHE_KEY = 'githubUserData'
 const CACHE_EXPIRY = 10 * 60 * 1000 // 10 minutes in milliseconds
 
-export async function fetchGithubUserData(username: string) {
+export async function fetchGithubUserData({ username }: { username: string }) {
   const cacheUserData = localStorage.getItem(`${CACHE_KEY}:user-data`)
   const cacheIssuesData = localStorage.getItem(`${CACHE_KEY}:issues-data`)
 
@@ -35,5 +41,26 @@ export async function fetchGithubUserData(username: string) {
     return result
   } catch {
     //
+  }
+}
+
+export async function fetchGithubIssuesData({
+  username,
+  query,
+  repo,
+}: FetchGithubUserDataProps) {
+  if (query && repo) {
+    try {
+      const responseIssues = await api.get(
+        `/search/issues?q=${query}%20repo:${username}/${repo}`,
+      )
+
+      const issuesData = responseIssues.data
+
+      const result = { issuesData }
+      return result
+    } catch {
+      //
+    }
   }
 }

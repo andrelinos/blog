@@ -1,4 +1,9 @@
 import { IssueProps } from '@/_types/github'
+import {
+  Skeleton,
+  SkeletonCard,
+  SkeletonContainerRoot,
+} from '@/components/skeleton'
 import { formatDate } from '@/utils/formatDate'
 
 import { PostCard, PostCardHeader, PostsContainer } from './styles'
@@ -9,7 +14,26 @@ interface PostsProps {
 }
 
 export function Posts({ data, isLoading }: PostsProps) {
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) {
+    return (
+      <SkeletonContainerRoot>
+        {Array.from({ length: 3 }).map((_, i) => {
+          return (
+            <SkeletonCard key={i}>
+              <PostCardHeader>
+                <Skeleton width="230px" height="30px" />
+                <Skeleton width="90px" height="24px" />
+              </PostCardHeader>
+              <Skeleton height="24px" />
+              <Skeleton height="24px" />
+              <Skeleton height="24px" />
+              <Skeleton height="24px" />
+            </SkeletonCard>
+          )
+        })}
+      </SkeletonContainerRoot>
+    )
+  }
 
   return (
     <PostsContainer>
