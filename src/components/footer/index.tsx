@@ -1,6 +1,8 @@
 import { FaDiscord, FaGithub, FaLinkedin } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 
+import { env } from '@/env'
+
 import { FooterContainer } from './styles'
 
 export function Footer() {
@@ -8,8 +10,11 @@ export function Footer() {
     <FooterContainer>
       Criado por Andrelino Silva
       <div>
-        <Link to="https://github.com/andrelinos" target="_blank">
-          <FaGithub /> andrelinos
+        <Link
+          to={`${env.VITE_API_URL}/${env.VITE_GITHUB_USER}`}
+          target="_blank"
+        >
+          <FaGithub /> {env.VITE_GITHUB_USER}
         </Link>
         <Link to="https://www.linkedin.com/in/andrelinosilva" target="_blank">
           <FaLinkedin /> andrelinosilva

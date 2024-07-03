@@ -47,7 +47,9 @@ export function Home() {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const data = await fetchGithubUserData({ username: 'andrelinos' })
+        const data = await fetchGithubUserData({
+          username: env.VITE_GITHUB_USER,
+        })
         setUserData(data?.userData)
         setIssuesData(data?.issuesData)
       } catch (error) {

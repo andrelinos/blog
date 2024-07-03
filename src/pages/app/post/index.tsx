@@ -5,6 +5,7 @@ import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 
 import { IssueProps, UserProps } from '@/_types/github'
+import { env } from '@/env'
 import { fetchGithubUserData } from '@/utils/fetchGithubUserData'
 
 import { HeaderPost } from './components/header'
@@ -30,7 +31,9 @@ export function Post() {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const data = await fetchGithubUserData({ username: 'andrelinos' })
+        const data = await fetchGithubUserData({
+          username: env.VITE_GITHUB_USER,
+        })
         setGitData(data)
       } catch (error) {
         setGitData(null)
