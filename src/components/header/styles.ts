@@ -11,9 +11,9 @@ export const ImageContainer = styled.div`
   img {
     width: auto;
     height: auto;
-    max-width: none; /* Remove qualquer restrição de largura */
-    max-height: none; /* Remove qualquer restrição de altura */
-    object-fit: none; /* Impede que a imagem seja redimensionada */
-    object-position: center; /* Centraliza a imagem */
+    max-width: none;
+    max-height: none;
+    object-fit: none;
+    object-position: center;
   }
 `

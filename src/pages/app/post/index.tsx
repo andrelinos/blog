@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import Markdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown'
 import { useParams } from 'react-router-dom'
+import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 
 import { IssueProps, UserProps } from '@/_types/github'
 import { fetchGithubUserData } from '@/utils/fetchGithubUserData'
 
 import { HeaderPost } from './components/header'
+import { SyntaxHighlighter } from './components/syntax-component'
 import { PostContainer, PostContent } from './styles'
 
 interface GitDataProps {
@@ -28,7 +30,7 @@ export function Post() {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const data = await fetchGithubUserData('andrelinos')
+        const data = await fetchGithubUserData({ username: 'andrelinos' })
         setGitData(data)
       } catch (error) {
         setGitData(null)
@@ -46,7 +48,30 @@ export function Post() {
     <PostContainer>
       <HeaderPost data={issue} />
       <PostContent>
-        <Markdown remarkPlugins={[remarkGfm]}>{issue?.body}</Markdown>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            code: ({ node, content, className, children, ...props }) => {
+              const match = /language-(\w+)/.exec(className || '')
+              return !content && match ? (
+                <SyntaxHighlighter
+                  style={darcula}
+                  language={match[1]}
+                  PreTag="div"
+                  {...props}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              )
+            },
+          }}
+        >
+          {issue?.body}
+        </ReactMarkdown>
       </PostContent>
     </PostContainer>
   )

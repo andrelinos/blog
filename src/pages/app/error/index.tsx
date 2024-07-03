@@ -11,7 +11,7 @@ export function Error() {
       </h1>
 
       <img
-        src="/public/assets/error.png"
+        src="/assets/error.png"
         alt="Whoops, algo aconteceu..."
         className="h-92 w-92 rounded-full  object-cover"
       />

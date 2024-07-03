@@ -50,6 +50,15 @@ export const PostCardHeader = styled.div`
   > h2 {
     padding-right: 1rem;
     font-size: 1.25rem;
+
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;
+    max-height: calc(1.6em * 2);
   }
 
   span {

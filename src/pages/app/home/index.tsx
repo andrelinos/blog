@@ -43,18 +43,6 @@ export function Home() {
     }
   }
 
-  // const fetchIssues = useCallback(async (query: string = '') => {
-  //   try {
-  //     setLoading(true)
-  //     const response = await api.get(
-  //       `/search/issues?q=${query}%20repo:${env.VITE_GITHUB_USER}/${env.VITE_REPO_NAME}`,
-  //     )
-  //     setGitData(response.data.items)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }, [])
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
